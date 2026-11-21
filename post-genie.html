@@ -1,0 +1,586 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Post System</title>
+<link rel="icon" href="spm.ico">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg-gradient-start: #020617;
+    --bg-gradient-end: #111827;
+    --card-bg: rgba(30, 41, 59, 0.55);
+    --card-border: rgba(255, 255, 255, 0.09);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent-primary: #22d3ee;
+    --accent-hover: #67e8f9;
+    --accent-success: #10b981;
+    --accent-danger: #f43f5e;
+    --code-bg: rgba(0, 0, 0, 0.3);
+    --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: fixed linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 60px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.sub-header {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    letter-spacing: 0.02em;
+}
+
+.prompt-workflow {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(12px);
+}
+
+.step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 12px;
+}
+
+.step-label {
+    font-weight: 800;
+    font-size: 0.8rem;
+    background: var(--accent-primary);
+    color: #020617;
+    padding: 5px 16px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.clear-btn {
+    background: transparent;
+    border: 1px solid var(--accent-danger);
+    color: var(--accent-danger);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.clear-btn:hover {
+    background: var(--accent-danger);
+    color: white;
+}
+
+label {
+    display: block;
+    color: var(--accent-primary);
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+    letter-spacing: 0.03em;
+}
+
+.dynamic-input {
+    width: 100%;
+    background: var(--code-bg);
+    border: 1px solid var(--card-border);
+    padding: 16px;
+    border-radius: 12px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    outline: none;
+    resize: vertical;
+    min-height: 110px;
+    transition: border-color 0.3s;
+}
+
+.dynamic-input:focus {
+    border-color: var(--accent-primary);
+}
+
+.dynamic-input::placeholder {
+    color: #64748b;
+}
+
+.prompt-content {
+    background: var(--code-bg);
+    padding: 25px;
+    border-radius: 12px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.92rem;
+    color: #cbd5e1;
+    white-space: pre-wrap;
+    border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 22px;
+    line-height: 1.6;
+    word-break: break-word;
+    max-height: 520px;
+    overflow-y: auto;
+}
+
+.prompt-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.prompt-content::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.2);
+}
+
+.prompt-content::-webkit-scrollbar-thumb {
+    background: var(--card-border);
+    border-radius: 4px;
+}
+
+.btn {
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s;
+    width: 100%;
+    text-decoration: none;
+    border: none;
+}
+
+.copy-btn {
+    background: rgba(34, 211, 238, 0.1);
+    color: var(--accent-primary);
+    border: 1px solid var(--accent-primary);
+}
+
+.copy-btn:hover {
+    background: var(--accent-primary);
+    color: #020617;
+}
+
+.copy-btn.copied {
+    background: var(--accent-success);
+    border-color: var(--accent-success);
+    color: white;
+}
+
+.footer {
+    margin-top: 80px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--card-border);
+    padding-top: 40px;
+    width: 100%;
+    padding-bottom: 40px;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 35px 14px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .sub-header {
+        font-size: 1rem;
+    }
+
+    .step-card {
+        padding: 22px;
+    }
+
+    .prompt-content {
+        font-size: 0.85rem;
+        padding: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <h1>Community Post System</h1>
+    <p class="sub-header">(Facebook Group Post)</p>
+</header>
+
+<div class="prompt-workflow">
+
+<!-- INPUT FIELD 1 -->
+<div class="step-card">
+    <div class="step-header">
+        <span class="step-label">Input Data 1</span>
+        <button class="clear-btn" onclick="resetInput('headlineInput')">Reset</button>
+    </div>
+
+    <label for="headlineInput">[Headline / Question]</label>
+
+    <textarea
+        id="headlineInput"
+        class="dynamic-input"
+        placeholder="Enter or paste the Headline / Question here..."
+        oninput="updatePrompts()"
+    ></textarea>
+</div>
+
+<!-- INPUT FIELD 2 -->
+<div class="step-card">
+    <div class="step-header">
+        <span class="step-label">Input Data 2</span>
+        <button class="clear-btn" onclick="resetInput('copyInput')">Reset</button>
+    </div>
+
+    <label for="copyInput">[Copy]</label>
+
+    <textarea
+        id="copyInput"
+        class="dynamic-input"
+        placeholder="Enter or paste the Copy here..."
+        oninput="updatePrompts()"
+    ></textarea>
+</div>
+
+<!-- INPUT FIELD 3 -->
+<div class="step-card">
+    <div class="step-header">
+        <span class="step-label">Input Data 3</span>
+        <button class="clear-btn" onclick="resetInput('finalCopyInput')">Reset</button>
+    </div>
+
+    <label for="finalCopyInput">[Facebook Post's Final Copy]</label>
+
+    <textarea
+        id="finalCopyInput"
+        class="dynamic-input"
+        placeholder="Enter or paste the Facebook Post's Final Copy here..."
+        oninput="updatePrompts()"
+    ></textarea>
+</div>
+
+<!-- PROMPT CARDS -->
+<div id="promptsContainer"></div>
+
+</div>
+
+<footer class="footer">
+    <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.</p>
+</footer>
+
+</div>
+
+<script>
+
+const templates = [
+
+{
+id: 1,
+text: `Answer the following prompt in Bengali (India).
+
+Rules:
+- এই বাক্যটি / অনুচ্ছেদটি কলকাতার রোজকার আড্ডা বা ঘরোয়া কথাবার্তার মতো আরও সহজ ও আন্তরিক ভাষায় লিখে দিন।.
+- Always address the reader as "তুমি".
+- Never use "আপনি" or "তুই".
+- Use a natural, modern Kolkata-style conversational tone.
+- Write in simple, সহজ and আন্তরিক Bengali, like everyday conversations or friendly, informal discussions among people in Kolkata.
+- Make the language sound warm, সহজ, natural and approachable, rather than overly formal, literary or textbook-like.
+- Avoid Bangladeshi vocabulary, spelling, and expressions.
+
+CONTEXT
+
+I am a school-going student of the West Bengal Board of Secondary Education (WBBSE), West Bengal, India. I want to learn how to use AI effectively to support my overall academic studies, including completing homework and classwork, understanding and learning the entire syllabus, practising and revising subjects, and preparing for examinations.
+
+PROMPT
+
+How To do this step-by-step?:
+
+[Headline / Question]
+
+Please provide a step-by-step execution process, starting from setup and continuing through full completion. 
+Also include AI-assisted prompts for any steps that can be completed with the help of AI.
+Each instruction must be written as if you are guiding the user live, in real time, while they are using their phone or computer.
+
+At the end of your answer, please provide the standalone, reusable prompt template(s), using [placeholders], for all AI prompt(s) required to execute this step. These prompt template(s) should be fully reusable in a new chat for other niches, topics, or use cases simply by replacing the [placeholders] with the appropriate values.
+
+Please write the answer in the most spontaneous and natural sounding modern, everyday conversational Bengali as spoken in Kolkata, West Bengal, India that can be understood by an 21 year old but contains the international standards of language.
+
+Strict Rules:
+
+এই উত্তরটি কলকাতার রোজকার আড্ডা বা ঘরোয়া কথাবার্তার মতো আরও সহজ ও আন্তরিক ভাষায় লিখে দিন।`
+},
+
+{
+id: 2,
+text: `এই প্রম্পটগুলো সহ এই উত্তরটা তুমি একটা ফেসবুক পোস্টের ফর্ম্যাটে ও রেডি-টু-পাবলিশ করে লিখে দাও।
+Strict Rules:
+১, এই উত্তরটি কলকাতার রোজকার আড্ডা বা ঘরোয়া কথাবার্তার মতো আরও সহজ ও আন্তরিক ভাষায় লিখে দাও।
+- Always address the reader as "তুমি".
+- Never use "আপনি" or "তুই".`
+},
+
+{
+id: 3,
+text: `উত্তরটা codebox-এ দাও, যাতে আমি কপি-ও-পেস্ট করে পোস্টটা সরাসরি ফেসবুকে পাবলিশ করতে পারি।`
+},
+
+{
+id: 4,
+text: `এই কপিটি কলকাতার রোজকার আড্ডা বা ঘরোয়া কথাবার্তার মতো আরও সহজ ও আন্তরিক ভাষায় লিখে দিন।
+
+Rules:
+- Use only Bengali (India).
+- Always address the reader as "তুমি".
+- Never use "আপনি" or "তুই".- Never use "তুমি" or "তুই".
+- Use a natural, modern Kolkata-style conversational tone.
+- Write in simple, সহজ and আন্তরিক Bengali, like everyday conversations or friendly, informal discussions among people in Kolkata.
+- Make the language sound warm, সহজ, natural and approachable, rather than overly formal, literary or textbook-like.
+- Avoid Bangladeshi vocabulary, spelling, and expressions.
+
+COPY
+
+[Copy]`
+},
+
+{
+id: 5,
+text: `উত্তরটা codebox-এ দাও, যাতে আমি কপি-ও-পেস্ট করে পোস্টটা সরাসরি ফেসবুকে পাবলিশ করতে পারি।`
+},
+
+{
+id: 6,
+text: `Based on the Facebook Post Copy below generate one best-and-final finished image that visually represents that content. Treat the content already in this prompt as the complete source of truth. Don't ask me to repeat, paste, or restate the content idea, title, description, audience, topic, or strategic direction. Do not give me an image prompt, concept, explanation, variation set, or design notes. Generate the actual image.
+
+PRIMARY JOB: Create one jaw-dropping social-media graphic that makes people stop scrolling and want to read the content. The image should capture the strongest idea, mechanism, distinction, tension, or payoff from the finished content and translate it into a visually unforgettable graphic.
+
+FORMAT: Generate the image in a 4:5 portrait format optimized for social media and mobile viewing. It should feel natively suited for platforms like Facebook, Instagram, LinkedIn, and X while remaining easy to read on a phone.
+
+VISUAL STANDARD: Make it feel premium, polished, bold, modern, high-contrast, and emotionally compelling. It should look like a high-end editorial social graphic or premium promotional poster, not a generic template, low-effort quote card, cheesy stock image, or cluttered infographic. Use strong composition, clear visual hierarchy, clean spacing, dramatic depth, and a central focal point that instantly communicates the core idea.
+
+TEXT USAGE: Keep on-image text minimal and powerful. Use the exact content title as the main headline unless a shorter version is needed for visual impact, in which case preserve the meaning. You may add one short supporting line if it strengthens the image, but keep the total text tight, readable, and mobile-friendly. The text must be crisp, prominent, and easy to read on a phone.
+
+CREATIVE DIRECTION: Build the visual around a compelling metaphor, scene, object, or dramatic visual situation that expresses the idea rather than merely decorating it. If the content suggests a strong before-versus-after contrast, tension, hidden mistake, overlooked opportunity, or diagnostic insight, show that visually. If a human figure helps, use one. If a symbolic or object-based concept is stronger, use that instead. Make the image feel intelligent and emotionally charged, not random.
+
+DESIGN RULES:
+- Make it instantly attention-grabbing in a crowded feed
+- Favor one dominant idea over clutter or too many elements
+- Use bold typography with excellent contrast and spacing
+- Keep the layout clean and easy to scan on mobile
+- Avoid tiny text, weak contrast, generic icons, bland backgrounds, and obvious stock-photo energy
+- Don't include logos, watermarks, fake UI screenshots, or unnecessary platform branding
+- Don't turn it into a busy step-by-step infographic unless the content absolutely demands it
+- The final image must feel like something a serious marketer would immediately post
+
+FINAL OUTPUT RULE: Return only the finished image. Don't return text commentary, image prompts, captions, explanations, or multiple options unless needed internally to complete the image generation. The goal is one freaking stunning finished image.
+
+FACEBOOK POST COPY
+
+[Facebook Post's Final Copy]`
+}
+
+];
+
+// CREATE PROMPT CARDS
+
+function createCards() {
+
+    const container = document.getElementById('promptsContainer');
+
+    container.innerHTML = '';
+
+    templates.forEach(t => {
+
+        const card = document.createElement('div');
+
+        card.className = 'step-card';
+
+        card.innerHTML = `
+            <div class="step-header">
+                <span class="step-label">Prompt #${t.id}</span>
+            </div>
+
+            <div class="prompt-content" id="p${t.id}"></div>
+
+            <button class="btn copy-btn" onclick="copyText('p${t.id}', this)">
+                <span>Copy Prompt #${t.id}</span>
+            </button>
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+// UPDATE PROMPTS
+
+function updatePrompts() {
+
+    const headlineVal =
+        document.getElementById('headlineInput').value.trim()
+        || "[Headline / Question]";
+
+    const copyVal =
+        document.getElementById('copyInput').value.trim()
+        || "[Copy]";
+
+    const finalCopyVal =
+        document.getElementById('finalCopyInput').value.trim()
+        || "[Facebook Post's Final Copy]";
+
+    templates.forEach(t => {
+
+        let updatedText = t.text;
+
+        if (t.id === 1) {
+            updatedText = updatedText.split('[Headline / Question]').join(headlineVal);
+        }
+
+        if (t.id === 4) {
+            updatedText = updatedText.split('[Copy]').join(copyVal);
+        }
+
+        if (t.id === 6) {
+            updatedText = updatedText.split("[Facebook Post's Final Copy]").join(finalCopyVal);
+        }
+
+        document.getElementById(`p${t.id}`).innerText = updatedText;
+
+    });
+
+}
+
+// RESET INPUT
+
+function resetInput(fieldId) {
+
+    document.getElementById(fieldId).value = "";
+
+    updatePrompts();
+
+}
+
+// COPY PROMPT
+
+function copyText(id, btn) {
+
+    const text = document.getElementById(id).innerText;
+
+    navigator.clipboard.writeText(text).then(() => {
+
+        const originalText = btn.innerHTML;
+
+        btn.innerHTML = `<span>Copied to Clipboard!</span>`;
+
+        btn.classList.add('copied');
+
+        setTimeout(() => {
+
+            btn.innerHTML = originalText;
+
+            btn.classList.remove('copied');
+
+        }, 2000);
+
+    }).catch(() => {
+
+        const textarea = document.createElement('textarea');
+
+        textarea.value = text;
+
+        document.body.appendChild(textarea);
+
+        textarea.select();
+
+        document.execCommand('copy');
+
+        document.body.removeChild(textarea);
+
+        btn.innerHTML = `<span>Copied to Clipboard!</span>`;
+
+        btn.classList.add('copied');
+
+        setTimeout(() => {
+
+            btn.innerHTML = `<span>Copy Prompt #${id.replace('p', '')}</span>`;
+
+            btn.classList.remove('copied');
+
+        }, 2000);
+
+    });
+
+}
+
+// INITIALIZE
+
+window.onload = () => {
+
+    createCards();
+
+    updatePrompts();
+
+};
+
+</script>
+
+</body>
+</html>
