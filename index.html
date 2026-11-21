@@ -1,1 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build Initial Audience</title>
+  <link rel="icon" href="spm.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-obsidian: #070b14;
+      --bg-navy: #0e1628;
+      --surface-glass: linear-gradient(145deg, rgba(22, 33, 56, 0.72), rgba(11, 17, 30, 0.88));
+      --surface-inset: rgba(5, 9, 18, 0.55);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-gloss: rgba(255, 255, 255, 0.16);
+      --gold-primary: #d4af37;
+      --gold-light: #f3d98b;
+      --gold-glow: rgba(212, 175, 55, 0.18);
+      --sapphire-accent: #38bdf8;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --shadow-card: 0 24px 48px -12px rgba(0, 0, 0, 0.65), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+      --shadow-hover: 0 12px 28px -8px rgba(212, 175, 55, 0.22), inset 0 1px 0 0 rgba(243, 217, 139, 0.25);
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-obsidian);
+      background-image: 
+        radial-gradient(circle at 18% 0%, rgba(29, 78, 216, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 15%, rgba(212, 175, 55, 0.1) 0%, transparent 40%),
+        linear-gradient(180deg, var(--bg-navy) 0%, var(--bg-obsidian) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      line-height: 1.65;
+      padding: 56px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 840px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    header::after {
+      content: "";
+      display: block;
+      width: 72px;
+      height: 3px;
+      margin: 18px auto 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, var(--gold-primary), var(--gold-light), var(--gold-primary), transparent);
+    }
+
+    h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      background: linear-gradient(180deg, #ffffff 25%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      line-height: 1.2;
+      filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.45));
+    }
+
+    .content-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    .card {
+      position: relative;
+      background: var(--surface-glass);
+      border: 1px solid var(--border-subtle);
+      border-top-color: var(--border-gloss);
+      border-radius: 20px;
+      padding: 30px 34px;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      pointer-events: none;
+    }
+
+    .workflow-list {
+      list-style: none;
+      counter-reset: step-counter;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .workflow-list li {
+      counter-increment: step-counter;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--surface-inset);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 0.98rem;
+      font-weight: 500;
+      color: #e2e8f0;
+      word-break: break-word;
+      transition: border-color 0.25s ease, background 0.25s ease;
+    }
+
+    .workflow-list li:hover {
+      border-color: rgba(212, 175, 55, 0.28);
+      background: rgba(15, 23, 42, 0.75);
+    }
+
+    .workflow-list li::before {
+      content: counter(step-counter, decimal-leading-zero);
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 28px;
+      padding: 0 8px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.22), rgba(212, 175, 55, 0.06));
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      color: var(--gold-light);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+    }
+
+    .note-banner {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.14), rgba(212, 175, 55, 0.04));
+      border: 1px solid rgba(212, 175, 55, 0.38);
+      box-shadow: inset 0 1px 0 rgba(243, 217, 139, 0.2);
+      color: var(--gold-light);
+      padding: 16px 22px;
+      border-radius: 14px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.01em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold-light);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold-primary);
+      box-shadow: 0 0 10px var(--gold-primary);
+    }
+
+    .link-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .link-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.7) 0%, rgba(7, 11, 20, 0.85) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-top-color: rgba(255, 255, 255, 0.15);
+      padding: 15px 20px;
+      border-radius: 12px;
+      color: #f1f5f9;
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      word-break: break-all;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .link-item:hover {
+      border-color: rgba(212, 175, 55, 0.55);
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .link-icon {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--gold-light);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
+    }
+
+    .link-item:hover .link-icon {
+      background: var(--gold-primary);
+      border-color: var(--gold-light);
+      color: #070b14;
+      transform: translate(2px, -2px);
+    }
+
+    .footer {
+      margin-top: 68px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      letter-spacing: 0.02em;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 32px;
+      width: 100%;
+      padding-bottom: 24px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 36px 14px;
+      }
+
+      h1 {
+        font-size: 1.85rem;
+      }
+
+      .card {
+        padding: 22px 18px;
+        border-radius: 16px;
+      }
+
+      .workflow-list li {
+        align-items: flex-start;
+        padding: 13px 14px;
+        font-size: 0.94rem;
+        gap: 12px;
+      }
+
+      .link-item {
+        padding: 13px 15px;
+        font-size: 0.83rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Build Initial Audience</h1>
+    </header>
+
+    <main class="content-stack">
+      <!-- Workflow Steps -->
+      <section class="card">
+        <ul class="workflow-list">
+          <li>Generate Prompt &gt; Prompt#1 of 1-my-fb-reply-genie.html</li>
+          <li>Use Prompt</li>
+          <li>Use Prompt &gt; Prompt#1 of 1-my-fb-reply-genie.html</li>
+          <li>Generate PDF in Google Doc</li>
+          <li>Paste the generated report</li>
+          <li>+ Support &gt; Prompt#3 of 1-my-fb-reply-genie.html</li>
+          <li>Generate Image &gt; 3d-cover</li>
+          <li>Paste the generated cover in Google Doc</li>
+          <li>+ Comment to inform about the sent DM &gt; Prompt#4 of 1-my-fb-reply-genie.html</li>
+        </ul>
+      </section>
+
+      <!-- Highlighted Note & Primary Links -->
+      <section class="card">
+        <div class="note-banner">
+          Only Two PGP will suffice for this
+        </div>
+        <div class="link-group">
+          <a class="link-item" href="https://spmhqo.github.io/bia/1-my-fb-reply-genie.html" target="_blank" rel="noopener noreferrer">
+            <span>https://spmhqo.github.io/bia/1-my-fb-reply-genie.html</span>
+            <span class="link-icon">&#8599;</span>
+          </a>
+          <a class="link-item" href="https://spmhqo.github.io/bia/3d-cover" target="_blank" rel="noopener noreferrer">
+            <span>https://spmhqo.github.io/bia/3d-cover</span>
+            <span class="link-icon">&#8599;</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- FORMAT ANSWER READY FOR PDF -->
+      <section class="card">
+        <span class="section-title">FORMAT ANSWER READY FOR PDF</span>
+        <div class="link-group">
+          <a class="link-item" href="https://spmhqo.github.io/bia/google-doc-pdf.html" target="_blank" rel="noopener noreferrer">
+            <span>https://spmhqo.github.io/bia/google-doc-pdf.html</span>
+            <span class="link-icon">&#8599;</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Get output in Bengali -->
+      <section class="card">
+        <span class="section-title">Get output in Bengali</span>
+        <div class="link-group">
+          <a class="link-item" href="https://spmhqo.github.io/goib/" target="_blank" rel="noopener noreferrer">
+            <span>https://spmhqo.github.io/goib/</span>
+            <span class="link-icon">&#8599;</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Translate in Bengali -->
+      <section class="card">
+        <span class="section-title">Translate in Bengali</span>
+        <div class="link-group">
+          <a class="link-item" href="https://spmhqo.github.io/tib/" target="_blank" rel="noopener noreferrer">
+            <span>https://spmhqo.github.io/tib/</span>
+            <span class="link-icon">&#8599;</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Facebook Post to Giveaway -->
+      <section class="card">
+        <span class="section-title">Facebook Post to Giveaway</span>
+        <div class="link-group">
+          <a class="link-item" href="https://spmhqo.github.io/bia/text2giveaway" target="_blank" rel="noopener noreferrer">
+            <span>https://spmhqo.github.io/bia/text2giveaway</span>
+            <span class="link-icon">&#8599;</span>
+          </a>
+          <a class="link-item" href="https://spmhqo.github.io/bia/text2giveaway-bn" target="_blank" rel="noopener noreferrer">
+            <span>https://spmhqo.github.io/bia/text2giveaway-bn</span>
+            <span class="link-icon">&#8599;</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Student Version Parash Pathar -->
+      <section class="card">
+        <span class="section-title">Student Version Parash Pathar (tailored to it):</span>
+        <div class="link-group">
+          <a class="link-item" href="https://spmhqo.github.io/bia/post-genie.html" target="_blank" rel="noopener noreferrer">
+            <span>https://spmhqo.github.io/bia/post-genie.html</span>
+            <span class="link-icon">&#8599;</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+</body>
+</html>
